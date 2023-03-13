@@ -1,37 +1,71 @@
 class Student:
-    def __init__(self, student_id, student_name, student_dob):
-        self.student_id = student_id
-        self.student_name = student_name
-        self.student_dob = student_dob
+    def __init__(self, id, name, dob):
+        self.id = id
+        self.name = name
+        self.dob = dob
 
-    def get_info(self):
-        return "Student id: {}, Student name: {}, Date of birth: {}".format(self.student_id, self.student_name,self.student_dob)
 class Course:
-    def __init__(self, course_id, course_name):
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
+class StudentEnrollment:
+    def __init__(self, student_id, course_id, marks):
+        self.student_id = student_id
         self.course_id = course_id
-        self.course_name = course_name
+        self.marks = marks
 
-    def get_info(self):
-        return "Course id: {}, Course name: {}".format(self.course_id,self.course_name)
-student1 = Student(1,"A","01/01/2003")
-student2 = Student(2,"B","02/02/2003")
-course1 = Course(101,"Math")
-course2 = Course(102,"English")
-students = []
-courses = {}
-student_marks_list = {}
+class School:
+    def __init__(self):
+        self.students = []
+        self.courses = []
+        self.enrollments = []
 
-students.append(student1)
-students.append(student2)
-courses[course1.course_id] = course1
-courses[course2.course_id] = course2
-student_marks_list[(student1.student_id,course1.course_id)] = 20
-student_marks_list[(student2.student_id,course2.course_id)] = 19
-for student in students:
-    print(student.get_info())
+    def add_student(self):
+        num_students = int(input("Enter the number of students in the class: "))
+        for i in range(num_students):
+            id = int(input("Enter student id: "))
+            name = input("Enter student name: ")
+            dob = input("Enter student date of birth: ")
+            student = Student(id, name, dob)
+            self.students.append(student)
 
-for course in courses.values():
-    print(course.get_info())
+    def add_course(self):
+        num_courses = int(input("Enter the number of courses: "))
+        for i in range(num_courses):
+            id = int(input("Enter course id: "))
+            name = input("Enter course name: ")
+            course = Course(id, name)
+            self.courses.append(course)
 
-for (student_id,course_id),mark in student_marks_list.items():
-    print("Student id: {}, Course id: {}, Mark: {}".format(student_id,course_id, mark))   
+    def add_marks(self):
+        course_id = int(input("Enter course id: "))
+        for student in self.students:
+            student_id = student.id
+            marks = int(input("Enter marks for student id {}: ".format(student_id)))
+            enrollment = StudentEnrollment(student_id, course_id, marks)
+            self.enrollments.append(enrollment)
+
+    def list_courses(self):
+        for course in self.courses:
+            print("Course id: {}, Course name: {}".format(course.id, course.name))
+
+    def list_students(self):
+        for student in self.students:
+            print("Student id: {}, Student name: {}, Date of birth: {}".format(student.id, student.name, student.dob))
+
+    def show_marks(self):
+        course_id = int(input("Enter course id: "))
+        for enrollment in self.enrollments:
+            if enrollment.course_id == course_id:
+                print("Student id: {}, Marks: {}".format(enrollment.student_id, enrollment.marks))
+
+school = School()
+school.add_student()
+school.add_course()
+school.add_marks()
+school.list_courses()
+school.list_students()
+school.show_marks()
+
+
